@@ -16,7 +16,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
+        ParseUser.logOut()
         if(ParseUser.getCurrentUser() != null)
         {
             gotoMainActivity()
@@ -27,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
             val password = findViewById<TextView>(R.id.et_password).text.toString()
             loginUser(username,password)
         }
-        findViewById<Button>(R.id.signupBtn).setOnClickListener {
+        findViewById<Button>(R.id.SignUpButton).setOnClickListener {
             val username = findViewById<TextView>(R.id.et_username).text.toString()
             val password = findViewById<TextView>(R.id.et_password).text.toString()
             signUpUser(username,password)
@@ -42,7 +42,7 @@ class LoginActivity : AppCompatActivity() {
         user.setUsername(username)
         user.setPassword(password)
 
-        user.signUpInBackground { e ->
+        user.signUpInBackground() { e ->
             if (e == null) {
                 // Hooray! Let them use the app now.
             } else {

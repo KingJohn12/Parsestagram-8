@@ -14,10 +14,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.FileProvider
-import com.parse.FindCallback
-import com.parse.ParseException
-import com.parse.ParseQuery
-import com.parse.ParseUser
+import com.parse.*
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -35,7 +32,13 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnSubmit).setOnClickListener {
             val description = findViewById<EditText>(R.id.description).text.toString()
             val user = ParseUser.getCurrentUser()
-            submitPost(description, user)
+            if(photoFile != null)
+            {
+                submitPost(description, user,photoFile!!)
+            } else {
+                
+            }
+
 
         }
         findViewById<Button>(R.id.btnTakePicture).setOnClickListener() {
@@ -43,10 +46,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun submitPost(description: String, user: ParseUser) {
+    fun submitPost(description: String, user: ParseUser,file:File) {
         val post = Post()
         post.setDescription(description)
         post.setUser(user)
+        post.setImage(ParseFile(file))
         post.saveInBackground { exception ->
             if(exception != null) {
                 Log.e(TAG,"Error while saving post")
@@ -87,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
         if (photoFile != null) {
             val fileProvider: Uri =
-                FileProvider.getUriForFile(this, "com.codepath.fileprovider", photoFile!!)
+                FileProvider.getUriForFile(this, "com.codepath.fireproof", photoFile!!)
             intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
 
             // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
